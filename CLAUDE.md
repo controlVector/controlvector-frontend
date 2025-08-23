@@ -1,6 +1,6 @@
 # ControlVector Frontend
 
-## Status: Authentication + Onboarding Complete ✅
+## Status: Authentication + LLM Configuration Complete ✅
 
 This is the React frontend for the ControlVector platform, built with TypeScript, Vite, and TailwindCSS.
 
@@ -20,6 +20,7 @@ This is the React frontend for the ControlVector platform, built with TypeScript
 - **DNS Providers**: Cloudflare, AWS Route 53, DigitalOcean DNS
 - **Cloud Providers**: DigitalOcean, AWS, GCP, Microsoft Azure
 - **Git Providers**: GitHub, GitLab, SSH key management
+- **LLM Providers**: OpenAI (GPT-4, GPT-3.5), Anthropic Claude (Opus, Sonnet, Haiku), Google Gemini, Local models, ControlVector AI
 - **Progress Tracking**: Visual progress indicators and step navigation
 - **Secure Storage**: Encrypted credential storage via Context Manager
 - **Skip Options**: Flexible onboarding with skip capabilities
@@ -99,17 +100,18 @@ VITE_API_BASE_URL=http://localhost:3002
 
 ## Authentication + Onboarding Flow
 
-### Current Implementation
+### Current Implementation  
 1. **Authentication**: Login/Register → JWT tokens → Dashboard
 2. **Onboarding**: Dashboard → Setup providers → Credential storage
-3. **Provider Setup**: DNS → Cloud → Git → Completion
+3. **Provider Setup**: DNS → Cloud → Git → LLM → Completion
 4. **Context Storage**: All credentials encrypted in Context Manager
-5. **Ready State**: User configured for infrastructure management
+5. **Ready State**: User configured for AI-driven infrastructure management
 
 ### Supported Providers
 - **DNS**: Cloudflare, AWS Route 53, DigitalOcean DNS
 - **Cloud**: DigitalOcean, AWS, GCP, Microsoft Azure  
 - **Git**: GitHub (tokens), GitLab (tokens), SSH keys
+- **LLM**: OpenAI (GPT-4, GPT-3.5), Anthropic Claude (Opus, Sonnet, Haiku), Google Gemini, Local models, ControlVector AI
 
 ## Context Manager Integration
 
@@ -142,9 +144,9 @@ VITE_API_BASE_URL=http://localhost:3002
 
 1. **Authentication** → Login/Signup → JWT token acquisition
 2. **Dashboard** → Welcome screen with service status
-3. **Onboarding** → Multi-step provider credential setup
+3. **Onboarding** → Multi-step provider credential setup (DNS → Cloud → Git → LLM)
 4. **Context Storage** → Encrypted credential storage in Context Manager
-5. **Ready State** → Prepared for Watson-driven infrastructure management
+5. **Ready State** → Prepared for Watson-driven AI infrastructure management
 
 ## Repository Architecture Integration
 
