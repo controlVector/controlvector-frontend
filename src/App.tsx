@@ -4,6 +4,7 @@ import { Toaster } from 'react-hot-toast'
 import { LoginPage } from '@/pages/auth/LoginPage'
 import { SignUpPage } from '@/pages/auth/SignUpPage'
 import { DashboardPage } from '@/pages/DashboardPage'
+import { OnboardingPage } from '@/pages/OnboardingPage'
 import { ProtectedRoute } from '@/components/auth/ProtectedRoute'
 import { AuthProvider } from '@/components/auth/AuthProvider'
 import { useAuthStore } from '@/stores/authStore'
@@ -42,6 +43,11 @@ function AppContent() {
           <Route path="/auth/signup" element={<SignUpPage />} />
           
           {/* Protected routes */}
+          <Route path="/onboarding" element={
+            <ProtectedRoute>
+              <OnboardingPage />
+            </ProtectedRoute>
+          } />
           <Route path="/dashboard" element={
             <ProtectedRoute>
               <DashboardPage />

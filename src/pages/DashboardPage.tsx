@@ -1,5 +1,6 @@
 import { useAuthStore } from '@/stores/authStore'
 import { motion } from 'framer-motion'
+import { Link } from 'react-router-dom'
 
 export function DashboardPage() {
   const { user, logout } = useAuthStore()
@@ -86,32 +87,44 @@ export function DashboardPage() {
                     <span className="text-sm text-gray-700">Atlas Infrastructure (Port 3003)</span>
                   </div>
                   <div className="flex items-center">
-                    <div className="h-2 w-2 bg-yellow-500 rounded-full mr-3"></div>
-                    <span className="text-sm text-gray-700">Context Manager (Port 3001)</span>
+                    <div className="h-2 w-2 bg-green-500 rounded-full mr-3"></div>
+                    <span className="text-sm text-gray-700">Context Manager (Port 3005)</span>
                   </div>
                 </div>
               </div>
 
-              <div className="text-left bg-gray-50 rounded-lg p-6">
+              <div className="text-left bg-gray-50 rounded-lg p-6 mb-6">
                 <h4 className="font-semibold text-gray-900 mb-3">Next Steps:</h4>
                 <ul className="space-y-2 text-sm text-gray-600">
                   <li className="flex items-start">
                     <span className="text-primary-500 mr-2">1.</span>
-                    Set up authentication service backend (port 3002)
+                    Complete onboarding to configure your providers
                   </li>
                   <li className="flex items-start">
                     <span className="text-primary-500 mr-2">2.</span>
-                    Configure OAuth providers (GitHub & Google)
+                    Set up DNS, cloud, and Git credentials
                   </li>
                   <li className="flex items-start">
                     <span className="text-primary-500 mr-2">3.</span>
-                    Build Watson chat interface for infrastructure management
+                    Start conversing with Watson for infrastructure management
                   </li>
                   <li className="flex items-start">
                     <span className="text-primary-500 mr-2">4.</span>
-                    Test end-to-end: Auth → Watson → Atlas → Infrastructure provisioning
+                    Deploy your first infrastructure through AI conversation
                   </li>
                 </ul>
+              </div>
+
+              <div className="flex flex-col sm:flex-row gap-4">
+                <Link
+                  to="/onboarding"
+                  className="flex-1 inline-flex justify-center items-center px-6 py-3 border border-transparent text-base font-medium rounded-md text-white bg-primary-600 hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500 transition-colors"
+                >
+                  🚀 Complete Setup
+                </Link>
+                <button className="flex-1 inline-flex justify-center items-center px-6 py-3 border border-primary-300 text-base font-medium rounded-md text-primary-700 bg-white hover:bg-primary-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500 transition-colors">
+                  💬 Chat with Watson
+                </button>
               </div>
             </div>
           </div>
