@@ -31,6 +31,8 @@ This is the React frontend for the ControlVector platform, built with TypeScript
 - **Three-tier Context**: Secret, user, and global context management
 - **JWT Authentication**: All context operations secured with JWT tokens
 - **Error Handling**: Comprehensive error management for context operations
+- **Credential Validation**: Dashboard automatically detects when stored credentials are missing
+- **Development Mode Warning**: Clear alerts when credentials are lost due to in-memory database restarts
 
 ### Watson Chat Integration ✅
 - **Real-time Chat**: WebSocket connection to Watson AI service (port 3004)
@@ -39,6 +41,8 @@ This is the React frontend for the ControlVector platform, built with TypeScript
 - **Typing Indicators**: Real-time typing and processing status
 - **Professional Chat UI**: Modern chat interface with timestamps and message history
 - **JWT Authentication**: Secure user/workspace-based conversation creation
+- **Real Infrastructure Data**: Watson displays actual DigitalOcean costs ($47.86/month) from live API
+- **Auto-reconnection**: WebSocket automatically reconnects after service restarts
 
 ### UI/UX Components
 - **Modern Design**: TailwindCSS with professional styling

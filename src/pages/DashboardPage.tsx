@@ -9,6 +9,8 @@ export function DashboardPage() {
   const [isOnboardingComplete, setIsOnboardingComplete] = useState(false)
   const [completedProviders, setCompletedProviders] = useState<string[]>([])
   const [isLoading, setIsLoading] = useState(true)
+  const [showCredentialWarning, setShowCredentialWarning] = useState(false)
+  const [missingProviders, setMissingProviders] = useState<string[]>([])
 
   useEffect(() => {
     checkOnboardingStatus()
@@ -18,40 +20,61 @@ export function DashboardPage() {
     try {
       const secrets = await secretAPI.listSecrets()
       const providers: string[] = []
+      const missing: string[] = []
       
       // Check LLM providers
-      if (secrets.credentials.some(cred => ['openai', 'anthropic', 'google'].includes(cred.provider))) {
+      const hasLLM = secrets.credentials.some(cred => ['openai', 'anthropic', 'google'].includes(cred.provider))
+      if (hasLLM) {
         providers.push('AI Assistant')
+      } else {
+        missing.push('AI Assistant')
       }
       
       // Check DNS providers
-      if (secrets.credentials.some(cred => 
+      const hasDNS = secrets.credentials.some(cred => 
         ['cloudflare', 'aws', 'digitalocean'].includes(cred.provider) &&
         (cred.key.includes('api_token') || cred.key.includes('access_key'))
-      )) {
+      )
+      if (hasDNS) {
         providers.push('DNS Provider')
+      } else {
+        missing.push('DNS Provider')
       }
       
       // Check Cloud providers
-      if (secrets.credentials.some(cred => 
+      const hasCloud = secrets.credentials.some(cred => 
         ['digitalocean', 'aws', 'gcp', 'azure'].includes(cred.provider) &&
         (cred.key.includes('api_token') || cred.key.includes('access_key') || cred.key.includes('subscription_id'))
-      )) {
+      )
+      if (hasCloud) {
         providers.push('Cloud Provider')
+      } else {
+        missing.push('Cloud Provider')
       }
       
       // Check Git providers
-      if (secrets.credentials.some(cred => 
+      const hasGit = secrets.credentials.some(cred => 
         ['github', 'gitlab'].includes(cred.provider)
-      ) || secrets.ssh_keys.length > 0) {
+      ) || secrets.ssh_keys.length > 0
+      if (hasGit) {
         providers.push('Git Repositories')
+      } else {
+        missing.push('Git Repositories')
       }
       
       setCompletedProviders(providers)
-      setIsOnboardingComplete(providers.length >= 2) // Complete if at least 2 providers configured
+      setMissingProviders(missing)
+      setIsOnboardingComplete(providers.length >= 2)
+      
+      // Show warning if we have no credentials at all but localStorage might indicate previous setup
+      const totalCredentials = secrets.credentials.length + secrets.ssh_keys.length
+      const hasStoredCompletionStatus = localStorage.getItem('onboarding_complete') === 'true'
+      setShowCredentialWarning(totalCredentials === 0 && (hasStoredCompletionStatus || providers.length === 0))
+      
     } catch (error) {
       console.error('Failed to check onboarding status:', error)
       setIsOnboardingComplete(false)
+      setShowCredentialWarning(true)
     } finally {
       setIsLoading(false)
     }
@@ -135,6 +158,26 @@ export function DashboardPage() {
                     : 'Authentication successful! Complete setup to start managing your infrastructure with Watson.'}
                 </p>
                 
+                {/* Credential Loss Warning */}
+                {showCredentialWarning && (
+                  <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4 mb-6">
+                    <div className="flex">
+                      <div className="flex-shrink-0">
+                        <svg className="h-5 w-5 text-yellow-400" viewBox="0 0 20 20" fill="currentColor">
+                          <path fillRule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
+                        </svg>
+                      </div>
+                      <div className="ml-3">
+                        <h3 className="text-sm font-medium text-yellow-800">⚠️ Configuration Reset Detected</h3>
+                        <div className="mt-2 text-sm text-yellow-700">
+                          <p>Your stored credentials may have been lost due to service restart in development mode. This is normal for in-memory database mode.</p>
+                          <p className="mt-1 font-medium">Please re-configure your providers below to restore full functionality.</p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                )}
+
                 {/* Onboarding Status */}
                 <div className={`border rounded-lg p-6 mb-6 ${
                   isOnboardingComplete 
@@ -147,23 +190,48 @@ export function DashboardPage() {
                     {isOnboardingComplete ? '✅ Setup Complete' : '⚙️ Setup Status'}
                   </h3>
                   
-                  {completedProviders.length > 0 ? (
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-3 text-left">
-                      {completedProviders.map((provider) => (
-                        <div key={provider} className="flex items-center">
-                          <div className="h-2 w-2 bg-green-500 rounded-full mr-3"></div>
-                          <span className="text-sm text-gray-700">{provider}</span>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    {/* Configured Providers */}
+                    {completedProviders.length > 0 && (
+                      <div className="text-left">
+                        <h4 className="text-sm font-medium text-green-700 mb-2">✅ Configured:</h4>
+                        <div className="space-y-1">
+                          {completedProviders.map((provider) => (
+                            <div key={provider} className="flex items-center">
+                              <div className="h-2 w-2 bg-green-500 rounded-full mr-3"></div>
+                              <span className="text-sm text-gray-700">{provider}</span>
+                            </div>
+                          ))}
                         </div>
-                      ))}
-                    </div>
-                  ) : (
-                    <div className="text-sm text-gray-600 text-left">
-                      <p>No providers configured yet. Complete onboarding to set up:</p>
-                      <ul className="mt-2 space-y-1 ml-4">
-                        <li>• AI Assistant (OpenAI, Anthropic, etc.)</li>
-                        <li>• DNS Provider (Cloudflare, Route53, etc.)</li>
-                        <li>• Cloud Provider (DigitalOcean, AWS, etc.)</li>
-                        <li>• Git Repositories (GitHub, GitLab, SSH)</li>
+                      </div>
+                    )}
+                    
+                    {/* Missing Providers */}
+                    {missingProviders.length > 0 && (
+                      <div className="text-left">
+                        <h4 className="text-sm font-medium text-yellow-700 mb-2">
+                          {completedProviders.length > 0 ? '⚠️ Missing:' : '🔧 Need to Configure:'}
+                        </h4>
+                        <div className="space-y-1">
+                          {missingProviders.map((provider) => (
+                            <div key={provider} className="flex items-center">
+                              <div className="h-2 w-2 bg-yellow-500 rounded-full mr-3"></div>
+                              <span className="text-sm text-gray-600">{provider}</span>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                  
+                  {missingProviders.length > 0 && (
+                    <div className="mt-4 text-sm text-gray-600">
+                      <p className="font-medium text-primary-700">Required for full functionality:</p>
+                      <ul className="mt-1 space-y-1 ml-4">
+                        {missingProviders.includes('Cloud Provider') && <li>• Cloud Provider for infrastructure management</li>}
+                        {missingProviders.includes('AI Assistant') && <li>• AI Assistant for intelligent responses</li>}
+                        {missingProviders.includes('DNS Provider') && <li>• DNS Provider for domain management</li>}
+                        {missingProviders.includes('Git Repositories') && <li>• Git access for deployment operations</li>}
                       </ul>
                     </div>
                   )}

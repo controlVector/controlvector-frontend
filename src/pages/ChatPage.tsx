@@ -132,7 +132,15 @@ export function ChatPage() {
       
       ws.onclose = () => {
         setIsConnected(false)
-        console.log('Disconnected from Watson service')
+        console.log('Disconnected from Watson service - attempting to reconnect in 3 seconds...')
+        
+        // Auto-reconnect after 3 seconds
+        setTimeout(() => {
+          if (!wsRef.current || wsRef.current.readyState === WebSocket.CLOSED) {
+            console.log('Attempting to reconnect to Watson service')
+            initializeWebSocket()
+          }
+        }, 3000)
       }
       
       ws.onerror = (error) => {
