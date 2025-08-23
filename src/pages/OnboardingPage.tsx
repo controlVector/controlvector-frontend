@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import React, { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { useNavigate } from 'react-router-dom'
 import { toast } from 'react-hot-toast'
@@ -20,6 +20,7 @@ export function OnboardingPage() {
   const navigate = useNavigate()
   const [currentStep, setCurrentStep] = useState(0)
   const [isLoading, setIsLoading] = useState(false)
+  const [initializing, setInitializing] = useState(true)
 
   const [steps, setSteps] = useState<OnboardingStep[]>([
     {
@@ -58,6 +59,65 @@ export function OnboardingPage() {
       completed: false
     }
   ])
+
+  // Initialize completion state on page load
+  const initializeCompletionState = async () => {
+    try {
+      const secrets = await secretAPI.listSecrets()
+      
+      const updatedSteps = steps.map(step => {
+        let completed = false
+        
+        switch (step.id) {
+          case 'llm':
+            completed = secrets.credentials.some(cred => 
+              ['openai', 'anthropic', 'google'].includes(cred.provider)
+            )
+            break
+          case 'dns':
+            completed = secrets.credentials.some(cred => 
+              ['cloudflare', 'aws', 'digitalocean'].includes(cred.provider) &&
+              (cred.key.includes('api_token') || cred.key.includes('access_key'))
+            )
+            break
+          case 'cloud':
+            completed = secrets.credentials.some(cred => 
+              ['digitalocean', 'aws', 'gcp', 'azure'].includes(cred.provider) &&
+              (cred.key.includes('api_token') || cred.key.includes('access_key') || cred.key.includes('subscription_id'))
+            )
+            break
+          case 'git':
+            completed = secrets.credentials.some(cred => 
+              ['github', 'gitlab'].includes(cred.provider)
+            ) || secrets.ssh_keys.length > 0
+            break
+        }
+        
+        return { ...step, completed }
+      })
+      
+      setSteps(updatedSteps)
+      
+      // Find the first incomplete step or go to complete
+      const firstIncompleteIndex = updatedSteps.findIndex(step => !step.completed && step.id !== 'complete')
+      if (firstIncompleteIndex === -1) {
+        // All steps completed, go to final step
+        setCurrentStep(updatedSteps.length - 1)
+      } else {
+        setCurrentStep(firstIncompleteIndex)
+      }
+    } catch (error) {
+      console.error('Failed to check completion state:', error)
+      // Continue with default state
+    } finally {
+      setInitializing(false)
+    }
+  }
+
+  // Initialize on mount
+  React.useEffect(() => {
+    initializeCompletionState()
+  }, [])
 
   const completeStep = (stepId: string) => {
     setSteps(prev => prev.map(step => 
@@ -150,13 +210,30 @@ export function OnboardingPage() {
             <p className="text-lg text-gray-600 mb-8 max-w-md mx-auto">
               Your ControlVector is now configured and ready to help you manage your infrastructure through conversational AI.
             </p>
+            
+            {/* Show configured services */}
+            <div className="grid grid-cols-2 gap-4 mb-8 max-w-md mx-auto">
+              {steps.slice(0, -1).filter(step => step.completed).map(step => (
+                <div key={step.id} className="flex items-center space-x-2 p-3 bg-green-50 rounded-lg border border-green-200">
+                  <span className="text-green-600 text-lg">{step.icon}</span>
+                  <span className="text-sm font-medium text-green-800">{step.title}</span>
+                  <span className="text-green-600">✓</span>
+                </div>
+              ))}
+            </div>
+            
             <div className="space-y-4">
               <button
-                onClick={finishOnboarding}
-                disabled={isLoading}
-                className="w-full inline-flex justify-center items-center px-6 py-3 border border-transparent text-base font-medium rounded-md text-white bg-primary-600 hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500 disabled:opacity-50"
+                onClick={() => navigate('/chat')}
+                className="w-full inline-flex justify-center items-center px-6 py-3 border border-transparent text-base font-medium rounded-md text-white bg-gradient-to-r from-primary-600 to-primary-700 hover:from-primary-700 hover:to-primary-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500 shadow-lg transition-all duration-200"
               >
-                {isLoading ? 'Setting up...' : 'Go to Dashboard'}
+                🚀 Start Chatting with AI Infrastructure Assistant
+              </button>
+              <button
+                onClick={() => navigate('/dashboard')}
+                className="w-full inline-flex justify-center items-center px-6 py-3 border border-gray-300 text-base font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500"
+              >
+                View Dashboard
               </button>
             </div>
           </div>
@@ -164,6 +241,17 @@ export function OnboardingPage() {
       default:
         return null
     }
+  }
+
+  if (initializing) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary-600 mx-auto mb-4"></div>
+          <p className="text-gray-600">Loading your setup progress...</p>
+        </div>
+      </div>
+    )
   }
 
   return (

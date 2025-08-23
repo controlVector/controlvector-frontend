@@ -5,6 +5,7 @@ import { LoginPage } from '@/pages/auth/LoginPage'
 import { SignUpPage } from '@/pages/auth/SignUpPage'
 import { DashboardPage } from '@/pages/DashboardPage'
 import { OnboardingPage } from '@/pages/OnboardingPage'
+import { ChatPage } from '@/pages/ChatPage'
 import { ProtectedRoute } from '@/components/auth/ProtectedRoute'
 import { AuthProvider } from '@/components/auth/AuthProvider'
 import { useAuthStore } from '@/stores/authStore'
@@ -51,6 +52,11 @@ function AppContent() {
           <Route path="/dashboard" element={
             <ProtectedRoute>
               <DashboardPage />
+            </ProtectedRoute>
+          } />
+          <Route path="/chat" element={
+            <ProtectedRoute>
+              <ChatPage />
             </ProtectedRoute>
           } />
           

@@ -12,7 +12,7 @@ interface LLMProvider {
   name: string
   logo: string
   description: string
-  category: 'cloud' | 'local'
+  category: 'cloud' | 'local' | 'controlvector'
   fields: {
     name: string
     label: string
@@ -25,6 +25,35 @@ interface LLMProvider {
 }
 
 const LLM_PROVIDERS: LLMProvider[] = [
+  {
+    id: 'controlvector',
+    name: 'ControlVector AI',
+    logo: '⚡',
+    description: 'Specialized infrastructure-focused AI models hosted by ControlVector',
+    category: 'controlvector',
+    fields: [
+      {
+        name: 'api_key',
+        label: 'API Key',
+        type: 'password',
+        placeholder: 'cv-...',
+        required: true,
+        help: 'Get your API key from your ControlVector account dashboard'
+      },
+      {
+        name: 'default_model',
+        label: 'Default Model',
+        type: 'select',
+        placeholder: 'Select default model',
+        required: true,
+        options: [
+          { value: 'cv-infra-pro', label: 'CV Infra Pro (Infrastructure specialist)' },
+          { value: 'cv-devops-expert', label: 'CV DevOps Expert (Deployment & scaling)' },
+          { value: 'cv-cost-optimizer', label: 'CV Cost Optimizer (Resource efficiency)' }
+        ]
+      }
+    ]
+  },
   {
     id: 'openai',
     name: 'OpenAI',
@@ -163,7 +192,9 @@ export function LLMProviderForm({ onComplete, onSkip }: LLMProviderFormProps) {
     setSelectedProvider(provider)
     // Set default values
     const defaults: Record<string, string> = {}
-    if (provider.id === 'openai') {
+    if (provider.id === 'controlvector') {
+      defaults.default_model = 'cv-infra-pro'
+    } else if (provider.id === 'openai') {
       defaults.default_model = 'gpt-4'
     } else if (provider.id === 'anthropic') {
       defaults.default_model = 'claude-3-sonnet-20240229'
@@ -198,7 +229,21 @@ export function LLMProviderForm({ onComplete, onSkip }: LLMProviderFormProps) {
       setIsLoading(true)
 
       // Store LLM configuration in Context Manager
-      if (selectedProvider.id === 'openai') {
+      if (selectedProvider.id === 'controlvector') {
+        await secretAPI.storeCredential({
+          key: 'controlvector_api_key',
+          value: formData.api_key,
+          credential_type: 'api_key',
+          provider: 'controlvector'
+        })
+
+        await secretAPI.storeCredential({
+          key: 'controlvector_default_model',
+          value: formData.default_model,
+          credential_type: 'api_key',
+          provider: 'controlvector'
+        })
+      } else if (selectedProvider.id === 'openai') {
         await secretAPI.storeCredential({
           key: 'openai_api_key',
           value: formData.api_key,
@@ -284,8 +329,19 @@ export function LLMProviderForm({ onComplete, onSkip }: LLMProviderFormProps) {
 
       toast.success(`${selectedProvider.name} configured successfully!`)
       onComplete()
-    } catch (error) {
+    } catch (error: any) {
       console.error('Error storing LLM configuration:', error)
+      
+      // Handle authentication errors specifically
+      if (error.response?.status === 401) {
+        toast.error('Session expired. Please log in again.')
+        // Clear tokens and redirect to login
+        localStorage.removeItem('access_token')
+        localStorage.removeItem('refresh_token')
+        window.location.href = '/auth/login'
+        return
+      }
+      
       toast.error('Failed to store LLM configuration. Please try again.')
     } finally {
       setIsLoading(false)
@@ -308,8 +364,12 @@ export function LLMProviderForm({ onComplete, onSkip }: LLMProviderFormProps) {
               {selectedProvider.name}
             </h4>
             <p className="text-sm text-gray-600">{selectedProvider.description}</p>
-            <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800 mt-1">
-              {selectedProvider.category === 'cloud' ? '☁️ Cloud' : '🏠 Local'}
+            <span className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium mt-1 ${
+              selectedProvider.category === 'controlvector' ? 'bg-primary-100 text-primary-800' :
+              selectedProvider.category === 'cloud' ? 'bg-blue-100 text-blue-800' : 'bg-gray-100 text-gray-800'
+            }`}>
+              {selectedProvider.category === 'controlvector' ? '⚡ ControlVector' : 
+               selectedProvider.category === 'cloud' ? '☁️ Cloud' : '🏠 Local'}
             </span>
           </div>
         </div>
@@ -379,7 +439,30 @@ export function LLMProviderForm({ onComplete, onSkip }: LLMProviderFormProps) {
       </p>
 
       <div className="space-y-4">
-        <h4 className="font-medium text-gray-900 text-sm uppercase tracking-wide">Cloud Providers</h4>
+        <h4 className="font-medium text-gray-900 text-sm uppercase tracking-wide">ControlVector AI</h4>
+        <div className="grid gap-4">
+          {LLM_PROVIDERS.filter(p => p.category === 'controlvector').map((provider) => (
+            <button
+              key={provider.id}
+              onClick={() => handleProviderSelect(provider)}
+              className="flex items-center space-x-4 p-4 border-2 border-primary-200 bg-gradient-to-r from-primary-50 to-primary-100 rounded-lg hover:border-primary-300 hover:from-primary-100 hover:to-primary-200 transition-all text-left"
+            >
+              <span className="text-3xl">{provider.logo}</span>
+              <div className="flex-1">
+                <h4 className="font-semibold text-gray-900">{provider.name}</h4>
+                <p className="text-sm text-gray-600">{provider.description}</p>
+                <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-primary-100 text-primary-800 mt-1">
+                  ⚡ Recommended
+                </span>
+              </div>
+              <svg className="w-5 h-5 text-primary-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7" />
+              </svg>
+            </button>
+          ))}
+        </div>
+
+        <h4 className="font-medium text-gray-900 text-sm uppercase tracking-wide mt-8">Cloud Providers</h4>
         <div className="grid gap-4">
           {LLM_PROVIDERS.filter(p => p.category === 'cloud').map((provider) => (
             <button

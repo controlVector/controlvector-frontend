@@ -21,10 +21,11 @@ contextAPI.interceptors.response.use(
   (response) => response,
   (error) => {
     if (error.response?.status === 401) {
-      // Handle unauthorized - could redirect to login
+      // Handle unauthorized - clear tokens but let the app handle navigation
       localStorage.removeItem('access_token')
       localStorage.removeItem('refresh_token')
-      window.location.href = '/auth/login'
+      // Don't redirect here - let the app's auth system handle it
+      console.log('Unauthorized access - tokens cleared')
     }
     return Promise.reject(error)
   }
