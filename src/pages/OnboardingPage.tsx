@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { useNavigate } from 'react-router-dom'
 import { toast } from 'react-hot-toast'
 import { secretAPI } from '@/services/contextAPI'
+import { LLMProviderForm } from '@/components/onboarding/LLMProviderForm'
 import { DNSProviderForm } from '@/components/onboarding/DNSProviderForm'
 import { CloudProviderForm } from '@/components/onboarding/CloudProviderForm'
 import { GitProviderForm } from '@/components/onboarding/GitProviderForm'
@@ -21,6 +22,13 @@ export function OnboardingPage() {
   const [isLoading, setIsLoading] = useState(false)
 
   const [steps, setSteps] = useState<OnboardingStep[]>([
+    {
+      id: 'llm',
+      title: 'AI Assistant',
+      description: 'Configure your preferred AI provider (OpenAI, Claude, Gemini, etc.)',
+      icon: '🤖',
+      completed: false
+    },
     {
       id: 'dns',
       title: 'DNS Provider',
@@ -90,6 +98,16 @@ export function OnboardingPage() {
     const step = steps[currentStep]
     
     switch (step.id) {
+      case 'llm':
+        return (
+          <LLMProviderForm 
+            onComplete={() => {
+              completeStep('llm')
+              nextStep()
+            }}
+            onSkip={nextStep}
+          />
+        )
       case 'dns':
         return (
           <DNSProviderForm 
