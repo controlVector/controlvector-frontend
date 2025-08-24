@@ -194,25 +194,25 @@ export function DNSProviderForm({ onComplete, onSkip }: DNSProviderFormProps) {
         <div className="flex items-center space-x-3 mb-6">
           <span className="text-2xl">{selectedProvider.logo}</span>
           <div>
-            <h4 className="text-lg font-semibold text-gray-900">
+            <h4 className="text-lg font-semibold text-white">
               {selectedProvider.name}
             </h4>
-            <p className="text-sm text-gray-600">{selectedProvider.description}</p>
+            <p className="text-sm text-cv-dark-200">{selectedProvider.description}</p>
           </div>
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-4">
           {selectedProvider.fields.map((field) => (
             <div key={field.name}>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                {field.label} {field.required && <span className="text-red-500">*</span>}
+              <label className="block text-sm font-medium text-cv-dark-200 mb-1">
+                {field.label} {field.required && <span className="text-cv-orange-400">*</span>}
               </label>
               <input
                 type={field.type}
                 value={formData[field.name] || ''}
                 onChange={(e) => handleInputChange(field.name, e.target.value)}
                 placeholder={field.placeholder}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
+                className="w-full px-3 py-2 bg-cv-dark-700 text-white border border-cv-dark-600 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-cv-orange-500 focus:border-cv-orange-500 placeholder-cv-dark-400 transition-colors"
                 required={field.required}
               />
             </div>
@@ -222,14 +222,14 @@ export function DNSProviderForm({ onComplete, onSkip }: DNSProviderFormProps) {
             <button
               type="button"
               onClick={handleBack}
-              className="flex-1 px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500"
+              className="flex-1 px-4 py-2 text-sm font-medium text-cv-dark-200 bg-cv-dark-800 border border-cv-dark-600 rounded-md hover:bg-cv-dark-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-cv-orange-500 transition-colors"
             >
               Back
             </button>
             <button
               type="submit"
               disabled={isLoading}
-              className="flex-1 px-4 py-2 text-sm font-medium text-white bg-primary-600 border border-transparent rounded-md hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500 disabled:opacity-50"
+              className="flex-1 px-4 py-2 text-sm font-medium text-white bg-cv-orange-600 border border-transparent rounded-md hover:bg-cv-orange-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-cv-orange-500 disabled:opacity-50 cv-orange-glow transition-colors"
             >
               {isLoading ? 'Storing...' : 'Save & Continue'}
             </button>
@@ -241,7 +241,7 @@ export function DNSProviderForm({ onComplete, onSkip }: DNSProviderFormProps) {
 
   return (
     <div className="space-y-6">
-      <p className="text-gray-600 mb-6">
+      <p className="text-cv-dark-200 mb-6">
         Connect your DNS provider to enable ControlVector to manage domain records 
         and SSL certificates automatically.
       </p>
@@ -251,14 +251,14 @@ export function DNSProviderForm({ onComplete, onSkip }: DNSProviderFormProps) {
           <button
             key={provider.id}
             onClick={() => handleProviderSelect(provider)}
-            className="flex items-center space-x-4 p-4 border border-gray-200 rounded-lg hover:border-primary-300 hover:bg-primary-50 transition-colors text-left"
+            className="flex items-center space-x-4 p-4 border border-cv-dark-600 rounded-lg hover:border-cv-orange-500 hover:bg-cv-dark-700 transition-colors text-left bg-cv-dark-800"
           >
             <span className="text-3xl">{provider.logo}</span>
             <div className="flex-1">
-              <h4 className="font-semibold text-gray-900">{provider.name}</h4>
-              <p className="text-sm text-gray-600">{provider.description}</p>
+              <h4 className="font-semibold text-white">{provider.name}</h4>
+              <p className="text-sm text-cv-dark-200">{provider.description}</p>
             </div>
-            <svg className="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <svg className="w-5 h-5 text-cv-dark-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7" />
             </svg>
           </button>
@@ -268,7 +268,7 @@ export function DNSProviderForm({ onComplete, onSkip }: DNSProviderFormProps) {
       <div className="border-t pt-6">
         <button
           onClick={onSkip}
-          className="w-full px-4 py-2 text-sm font-medium text-gray-500 hover:text-gray-700 transition-colors"
+          className="w-full px-4 py-2 text-sm font-medium text-cv-dark-400 hover:text-cv-orange-400 transition-colors"
         >
           Skip DNS setup for now
         </button>

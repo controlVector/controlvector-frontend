@@ -360,13 +360,13 @@ export function LLMProviderForm({ onComplete, onSkip }: LLMProviderFormProps) {
         <div className="flex items-center space-x-3 mb-6">
           <span className="text-2xl">{selectedProvider.logo}</span>
           <div>
-            <h4 className="text-lg font-semibold text-gray-900">
+            <h4 className="text-lg font-semibold text-white">
               {selectedProvider.name}
             </h4>
-            <p className="text-sm text-gray-600">{selectedProvider.description}</p>
+            <p className="text-sm text-cv-dark-200">{selectedProvider.description}</p>
             <span className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium mt-1 ${
-              selectedProvider.category === 'controlvector' ? 'bg-primary-100 text-primary-800' :
-              selectedProvider.category === 'cloud' ? 'bg-blue-100 text-blue-800' : 'bg-gray-100 text-gray-800'
+              selectedProvider.category === 'controlvector' ? 'bg-cv-orange-500/20 text-cv-orange-400' :
+              selectedProvider.category === 'cloud' ? 'bg-blue-500/20 text-blue-400' : 'bg-cv-dark-600 text-cv-dark-200'
             }`}>
               {selectedProvider.category === 'controlvector' ? '⚡ ControlVector' : 
                selectedProvider.category === 'cloud' ? '☁️ Cloud' : '🏠 Local'}
@@ -377,19 +377,19 @@ export function LLMProviderForm({ onComplete, onSkip }: LLMProviderFormProps) {
         <form onSubmit={handleSubmit} className="space-y-4">
           {selectedProvider.fields.map((field) => (
             <div key={field.name}>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                {field.label} {field.required && <span className="text-red-500">*</span>}
+              <label className="block text-sm font-medium text-white mb-1">
+                {field.label} {field.required && <span className="text-cv-orange-400">*</span>}
               </label>
               {field.type === 'select' ? (
                 <select
                   value={formData[field.name] || ''}
                   onChange={(e) => handleInputChange(field.name, e.target.value)}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
+                  className="w-full px-3 py-2 bg-cv-dark-700 border border-cv-dark-600 rounded-md shadow-sm text-white focus:outline-none focus:ring-2 focus:ring-cv-orange-500 focus:border-cv-orange-500"
                   required={field.required}
                 >
-                  <option value="">{field.placeholder}</option>
+                  <option value="" className="bg-cv-dark-700 text-cv-dark-400">{field.placeholder}</option>
                   {field.options?.map((option) => (
-                    <option key={option.value} value={option.value}>
+                    <option key={option.value} value={option.value} className="bg-cv-dark-700 text-white">
                       {option.label}
                     </option>
                   ))}
@@ -400,12 +400,12 @@ export function LLMProviderForm({ onComplete, onSkip }: LLMProviderFormProps) {
                   value={formData[field.name] || ''}
                   onChange={(e) => handleInputChange(field.name, e.target.value)}
                   placeholder={field.placeholder}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
+                  className="w-full px-3 py-2 bg-cv-dark-700 border border-cv-dark-600 rounded-md shadow-sm text-white placeholder-cv-dark-400 focus:outline-none focus:ring-2 focus:ring-cv-orange-500 focus:border-cv-orange-500"
                   required={field.required}
                 />
               )}
               {field.help && (
-                <p className="text-xs text-gray-500 mt-1">{field.help}</p>
+                <p className="text-xs text-cv-dark-300 mt-1">{field.help}</p>
               )}
             </div>
           ))}
@@ -414,14 +414,14 @@ export function LLMProviderForm({ onComplete, onSkip }: LLMProviderFormProps) {
             <button
               type="button"
               onClick={handleBack}
-              className="flex-1 px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500"
+              className="flex-1 px-4 py-2 text-sm font-medium text-cv-dark-200 bg-cv-dark-800 border border-cv-dark-600 rounded-md hover:bg-cv-dark-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-cv-orange-500"
             >
               Back
             </button>
             <button
               type="submit"
               disabled={isLoading}
-              className="flex-1 px-4 py-2 text-sm font-medium text-white bg-primary-600 border border-transparent rounded-md hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500 disabled:opacity-50"
+              className="flex-1 px-4 py-2 text-sm font-medium text-white bg-cv-orange-500 cv-orange-glow border border-transparent rounded-md hover:bg-cv-orange-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-cv-orange-500 disabled:opacity-50"
             >
               {isLoading ? 'Configuring...' : 'Save & Continue'}
             </button>
@@ -433,69 +433,69 @@ export function LLMProviderForm({ onComplete, onSkip }: LLMProviderFormProps) {
 
   return (
     <div className="space-y-6">
-      <p className="text-gray-600 mb-6">
+      <p className="text-cv-dark-200 mb-6">
         Choose your AI assistant provider. Victor will use this to understand and execute 
         your infrastructure requests through natural language.
       </p>
 
       <div className="space-y-4">
-        <h4 className="font-medium text-gray-900 text-sm uppercase tracking-wide">ControlVector AI</h4>
+        <h4 className="font-medium text-white text-sm uppercase tracking-wide">ControlVector AI</h4>
         <div className="grid gap-4">
           {LLM_PROVIDERS.filter(p => p.category === 'controlvector').map((provider) => (
             <button
               key={provider.id}
               onClick={() => handleProviderSelect(provider)}
-              className="flex items-center space-x-4 p-4 border-2 border-primary-200 bg-gradient-to-r from-primary-50 to-primary-100 rounded-lg hover:border-primary-300 hover:from-primary-100 hover:to-primary-200 transition-all text-left"
+              className="flex items-center space-x-4 p-4 border-2 border-cv-orange-500/30 bg-gradient-to-r from-cv-orange-500/10 to-cv-orange-500/20 rounded-lg hover:border-cv-orange-500 hover:from-cv-orange-500/20 hover:to-cv-orange-500/30 transition-all text-left"
             >
               <span className="text-3xl">{provider.logo}</span>
               <div className="flex-1">
-                <h4 className="font-semibold text-gray-900">{provider.name}</h4>
-                <p className="text-sm text-gray-600">{provider.description}</p>
-                <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-primary-100 text-primary-800 mt-1">
+                <h4 className="font-semibold text-white">{provider.name}</h4>
+                <p className="text-sm text-cv-dark-200">{provider.description}</p>
+                <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-cv-orange-500/20 text-cv-orange-400 mt-1">
                   ⚡ Recommended
                 </span>
               </div>
-              <svg className="w-5 h-5 text-primary-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg className="w-5 h-5 text-cv-orange-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7" />
               </svg>
             </button>
           ))}
         </div>
 
-        <h4 className="font-medium text-gray-900 text-sm uppercase tracking-wide mt-8">Cloud Providers</h4>
+        <h4 className="font-medium text-white text-sm uppercase tracking-wide mt-8">Cloud Providers</h4>
         <div className="grid gap-4">
           {LLM_PROVIDERS.filter(p => p.category === 'cloud').map((provider) => (
             <button
               key={provider.id}
               onClick={() => handleProviderSelect(provider)}
-              className="flex items-center space-x-4 p-4 border border-gray-200 rounded-lg hover:border-primary-300 hover:bg-primary-50 transition-colors text-left"
+              className="flex items-center space-x-4 p-4 bg-cv-dark-800 border border-cv-dark-600 rounded-lg hover:border-cv-orange-500 hover:bg-cv-dark-700 transition-colors text-left"
             >
               <span className="text-3xl">{provider.logo}</span>
               <div className="flex-1">
-                <h4 className="font-semibold text-gray-900">{provider.name}</h4>
-                <p className="text-sm text-gray-600">{provider.description}</p>
+                <h4 className="font-semibold text-white">{provider.name}</h4>
+                <p className="text-sm text-cv-dark-200">{provider.description}</p>
               </div>
-              <svg className="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg className="w-5 h-5 text-cv-dark-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7" />
               </svg>
             </button>
           ))}
         </div>
 
-        <h4 className="font-medium text-gray-900 text-sm uppercase tracking-wide mt-8">Local Models</h4>
+        <h4 className="font-medium text-white text-sm uppercase tracking-wide mt-8">Local Models</h4>
         <div className="grid gap-4">
           {LLM_PROVIDERS.filter(p => p.category === 'local').map((provider) => (
             <button
               key={provider.id}
               onClick={() => handleProviderSelect(provider)}
-              className="flex items-center space-x-4 p-4 border border-gray-200 rounded-lg hover:border-primary-300 hover:bg-primary-50 transition-colors text-left"
+              className="flex items-center space-x-4 p-4 bg-cv-dark-800 border border-cv-dark-600 rounded-lg hover:border-cv-orange-500 hover:bg-cv-dark-700 transition-colors text-left"
             >
               <span className="text-3xl">{provider.logo}</span>
               <div className="flex-1">
-                <h4 className="font-semibold text-gray-900">{provider.name}</h4>
-                <p className="text-sm text-gray-600">{provider.description}</p>
+                <h4 className="font-semibold text-white">{provider.name}</h4>
+                <p className="text-sm text-cv-dark-200">{provider.description}</p>
               </div>
-              <svg className="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg className="w-5 h-5 text-cv-dark-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7" />
               </svg>
             </button>
@@ -503,10 +503,10 @@ export function LLMProviderForm({ onComplete, onSkip }: LLMProviderFormProps) {
         </div>
       </div>
 
-      <div className="border-t pt-6">
+      <div className="border-t border-cv-dark-600 pt-6">
         <button
           onClick={onSkip}
-          className="w-full px-4 py-2 text-sm font-medium text-gray-500 hover:text-gray-700 transition-colors"
+          className="w-full px-4 py-2 text-sm font-medium text-cv-dark-400 hover:text-cv-dark-200 transition-colors"
         >
           Skip LLM setup for now
         </button>

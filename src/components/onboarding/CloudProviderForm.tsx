@@ -257,18 +257,18 @@ export function CloudProviderForm({ onComplete, onSkip }: CloudProviderFormProps
         <div className="flex items-center space-x-3 mb-6">
           <span className="text-2xl">{selectedProvider.logo}</span>
           <div>
-            <h4 className="text-lg font-semibold text-gray-900">
+            <h4 className="text-lg font-semibold text-white">
               {selectedProvider.name}
             </h4>
-            <p className="text-sm text-gray-600">{selectedProvider.description}</p>
+            <p className="text-sm text-cv-dark-200">{selectedProvider.description}</p>
           </div>
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-4">
           {selectedProvider.fields.map((field) => (
             <div key={field.name}>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                {field.label} {field.required && <span className="text-red-500">*</span>}
+              <label className="block text-sm font-medium text-white mb-1">
+                {field.label} {field.required && <span className="text-cv-orange-400">*</span>}
               </label>
               {field.name === 'service_account_key' ? (
                 <textarea
@@ -276,7 +276,7 @@ export function CloudProviderForm({ onComplete, onSkip }: CloudProviderFormProps
                   onChange={(e) => handleInputChange(field.name, e.target.value)}
                   placeholder={field.placeholder}
                   rows={4}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500 font-mono text-sm"
+                  className="w-full px-3 py-2 bg-cv-dark-700 border border-cv-dark-600 rounded-md shadow-sm text-white placeholder-cv-dark-400 focus:outline-none focus:ring-2 focus:ring-cv-orange-500 focus:border-cv-orange-500 font-mono text-sm"
                   required={field.required}
                 />
               ) : (
@@ -285,12 +285,12 @@ export function CloudProviderForm({ onComplete, onSkip }: CloudProviderFormProps
                   value={formData[field.name] || ''}
                   onChange={(e) => handleInputChange(field.name, e.target.value)}
                   placeholder={field.placeholder}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
+                  className="w-full px-3 py-2 bg-cv-dark-700 border border-cv-dark-600 rounded-md shadow-sm text-white placeholder-cv-dark-400 focus:outline-none focus:ring-2 focus:ring-cv-orange-500 focus:border-cv-orange-500"
                   required={field.required}
                 />
               )}
               {field.help && (
-                <p className="text-xs text-gray-500 mt-1">{field.help}</p>
+                <p className="text-xs text-cv-dark-300 mt-1">{field.help}</p>
               )}
             </div>
           ))}
@@ -299,14 +299,14 @@ export function CloudProviderForm({ onComplete, onSkip }: CloudProviderFormProps
             <button
               type="button"
               onClick={handleBack}
-              className="flex-1 px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500"
+              className="flex-1 px-4 py-2 text-sm font-medium text-cv-dark-200 bg-cv-dark-800 border border-cv-dark-600 rounded-md hover:bg-cv-dark-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-cv-orange-500"
             >
               Back
             </button>
             <button
               type="submit"
               disabled={isLoading}
-              className="flex-1 px-4 py-2 text-sm font-medium text-white bg-primary-600 border border-transparent rounded-md hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500 disabled:opacity-50"
+              className="flex-1 px-4 py-2 text-sm font-medium text-white bg-cv-orange-500 cv-orange-glow border border-transparent rounded-md hover:bg-cv-orange-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-cv-orange-500 disabled:opacity-50"
             >
               {isLoading ? 'Storing...' : 'Save & Continue'}
             </button>
@@ -318,7 +318,7 @@ export function CloudProviderForm({ onComplete, onSkip }: CloudProviderFormProps
 
   return (
     <div className="space-y-6">
-      <p className="text-gray-600 mb-6">
+      <p className="text-cv-dark-200 mb-6">
         Connect your cloud provider to enable ControlVector to provision and manage 
         infrastructure resources automatically.
       </p>
@@ -328,24 +328,24 @@ export function CloudProviderForm({ onComplete, onSkip }: CloudProviderFormProps
           <button
             key={provider.id}
             onClick={() => handleProviderSelect(provider)}
-            className="flex items-center space-x-4 p-4 border border-gray-200 rounded-lg hover:border-primary-300 hover:bg-primary-50 transition-colors text-left"
+            className="flex items-center space-x-4 p-4 bg-cv-dark-800 border border-cv-dark-600 rounded-lg hover:border-cv-orange-500 hover:bg-cv-dark-700 transition-colors text-left"
           >
             <span className="text-3xl">{provider.logo}</span>
             <div className="flex-1">
-              <h4 className="font-semibold text-gray-900">{provider.name}</h4>
-              <p className="text-sm text-gray-600">{provider.description}</p>
+              <h4 className="font-semibold text-white">{provider.name}</h4>
+              <p className="text-sm text-cv-dark-200">{provider.description}</p>
             </div>
-            <svg className="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <svg className="w-5 h-5 text-cv-dark-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7" />
             </svg>
           </button>
         ))}
       </div>
 
-      <div className="border-t pt-6">
+      <div className="border-t border-cv-dark-600 pt-6">
         <button
           onClick={onSkip}
-          className="w-full px-4 py-2 text-sm font-medium text-gray-500 hover:text-gray-700 transition-colors"
+          className="w-full px-4 py-2 text-sm font-medium text-cv-dark-400 hover:text-cv-dark-200 transition-colors"
         >
           Skip cloud provider setup for now
         </button>
