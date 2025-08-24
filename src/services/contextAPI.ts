@@ -1,6 +1,6 @@
 import axios from 'axios'
 
-const CONTEXT_API_BASE = 'http://localhost:3005/api/v1/context'
+const CONTEXT_API_BASE = `${import.meta.env.VITE_CONTEXT_API_URL || 'http://localhost:3005'}/api/v1/context`
 
 // Create axios instance with auth headers
 const contextAPI = axios.create({

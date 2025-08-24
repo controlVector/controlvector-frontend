@@ -5,12 +5,33 @@
 /* Import Inter font */
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
 
-/* Set Inter as the default font */
+/* Set Inter as the default font with ControlVector styling */
 body {
   font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   font-feature-settings: 'cv11', 'ss01';
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  
+  /* ControlVector Matrix Background */
+  background: linear-gradient(135deg, #000000 0%, #111111 50%, #1a1a1a 100%);
+  background-attachment: fixed;
+  min-height: 100vh;
+}
+
+/* Matrix-style grid overlay */
+body::before {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: 
+    linear-gradient(rgba(57, 255, 20, 0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(57, 255, 20, 0.03) 1px, transparent 1px);
+  background-size: 50px 50px;
+  pointer-events: none;
+  z-index: -1;
 }
 
 /* Custom scrollbar */
@@ -19,21 +40,21 @@ body {
 }
 
 ::-webkit-scrollbar-track {
-  background: #f1f5f9;
+  background: #111111; /* ControlVector dark background */
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #cbd5e1;
+  background: #f97316; /* ControlVector orange */
   border-radius: 4px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #94a3b8;
+  background: #ea580c; /* Darker ControlVector orange */
 }
 
-/* Focus styles */
+/* Focus styles with ControlVector orange */
 .focus-ring {
-  @apply focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500;
+  @apply focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-cv-orange-500;
 }
 
 /* Form input styles */
@@ -52,11 +73,12 @@ select {
 }
 
 .btn-primary {
-  @apply bg-primary-600 text-white hover:bg-primary-700;
+  @apply bg-cv-orange-600 text-white hover:bg-cv-orange-700 shadow-lg;
+  box-shadow: 0 0 20px rgba(249, 115, 22, 0.3);
 }
 
 .btn-secondary {
-  @apply bg-gray-600 text-white hover:bg-gray-700;
+  @apply bg-cv-dark-600 text-white hover:bg-cv-dark-500 border border-cv-orange-500/30;
 }
 
 .btn-outline {
@@ -133,4 +155,84 @@ select {
 
 .alert-info {
   @apply bg-blue-50 text-blue-700 border border-blue-200;
+}
+
+/* ControlVector Specific Styles */
+.cv-glow {
+  color: #39ff14;
+  text-shadow: 0 0 5px currentColor, 0 0 10px currentColor, 0 0 15px currentColor;
+}
+
+.cv-matrix-text {
+  color: #39ff14;
+  font-family: 'Courier New', monospace;
+  animation: glow 2s ease-in-out infinite alternate;
+}
+
+.cv-orange-glow {
+  color: #f97316;
+  text-shadow: 0 0 10px currentColor, 0 0 20px currentColor, 0 0 30px currentColor;
+}
+
+.cv-terminal {
+  background: #000000;
+  color: #39ff14;
+  font-family: 'Courier New', monospace;
+  border: 1px solid rgba(57, 255, 20, 0.3);
+  box-shadow: inset 0 0 20px rgba(57, 255, 20, 0.1);
+}
+
+.cv-card {
+  background: linear-gradient(135deg, #111111 0%, #1a1a1a 100%);
+  border: 1px solid rgba(249, 115, 22, 0.2);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3), 0 0 20px rgba(249, 115, 22, 0.1);
+}
+
+.cv-button {
+  background: linear-gradient(135deg, #f97316 0%, #ea580c 100%);
+  color: white;
+  border: none;
+  box-shadow: 0 0 20px rgba(249, 115, 22, 0.4);
+  transition: all 0.3s ease;
+}
+
+.cv-button:hover {
+  box-shadow: 0 0 30px rgba(249, 115, 22, 0.6);
+  transform: translateY(-1px);
+}
+
+/* Matrix rain animation */
+@keyframes matrixRain {
+  0% {
+    transform: translateY(-100vh);
+    opacity: 0;
+  }
+  10% {
+    opacity: 1;
+  }
+  90% {
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(100vh);
+    opacity: 0;
+  }
+}
+
+@keyframes glow {
+  from {
+    text-shadow: 0 0 5px currentColor, 0 0 10px currentColor, 0 0 15px currentColor;
+  }
+  to {
+    text-shadow: 0 0 10px currentColor, 0 0 20px currentColor, 0 0 30px currentColor;
+  }
+}
+
+@keyframes flicker {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.8;
+  }
 }

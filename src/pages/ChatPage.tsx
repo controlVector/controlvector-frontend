@@ -1,5 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react'
 import { toast } from 'react-hot-toast'
+import { Link } from 'react-router-dom'
+import { CogIcon } from '@heroicons/react/24/outline'
 
 interface Message {
   id: string
@@ -198,13 +200,13 @@ export function ChatPage() {
     if (!intent) return null
     
     const intentColors: Record<string, string> = {
-      deploy_application: 'bg-blue-100 text-blue-800',
-      create_infrastructure: 'bg-green-100 text-green-800',
-      scale_resources: 'bg-purple-100 text-purple-800',
-      monitor_health: 'bg-yellow-100 text-yellow-800',
-      manage_costs: 'bg-orange-100 text-orange-800',
-      security_scan: 'bg-red-100 text-red-800',
-      general_question: 'bg-gray-100 text-gray-800'
+      deploy_application: 'bg-cv-dark-600 text-cv-matrix-green border border-cv-matrix-green/30',
+      create_infrastructure: 'bg-cv-dark-600 text-cv-orange-400 border border-cv-orange-400/30',
+      scale_resources: 'bg-cv-dark-600 text-purple-400 border border-purple-400/30',
+      monitor_health: 'bg-cv-dark-600 text-yellow-400 border border-yellow-400/30',
+      manage_costs: 'bg-cv-dark-600 text-cv-orange-300 border border-cv-orange-300/30',
+      security_scan: 'bg-cv-dark-600 text-red-400 border border-red-400/30',
+      general_question: 'bg-cv-dark-600 text-cv-dark-200 border border-cv-dark-400/30'
     }
     
     const color = intentColors[intent] || 'bg-gray-100 text-gray-800'
@@ -215,7 +217,7 @@ export function ChatPage() {
           {intent.replace('_', ' ').replace(/\b\w/g, l => l.toUpperCase())}
         </span>
         {confidence && (
-          <span className="text-xs text-gray-500">
+          <span className="text-xs text-cv-dark-300">
             {Math.round(confidence * 100)}% confidence
           </span>
         )}
@@ -224,25 +226,25 @@ export function ChatPage() {
   }
 
   return (
-    <div className="flex flex-col h-screen bg-gray-50">
+    <div className="flex flex-col h-screen bg-cv-dark-900">
       {/* Header */}
-      <header className="bg-white shadow-sm border-b border-gray-200 px-6 py-4">
+      <header className="bg-cv-dark-800 shadow-sm border-b border-cv-dark-600 px-6 py-4">
         <div className="flex items-center justify-between">
           <div className="flex items-center space-x-3">
-            <div className="h-8 w-8 bg-gradient-to-r from-primary-500 to-primary-600 rounded-lg flex items-center justify-center">
+            <div className="h-8 w-8 bg-gradient-to-r from-cv-orange-600 to-cv-orange-500 rounded-lg flex items-center justify-center cv-orange-glow">
               <span className="text-white font-bold text-sm">W</span>
             </div>
             <div>
-              <h1 className="text-lg font-semibold text-gray-900">Watson AI Assistant</h1>
+              <h1 className="text-lg font-semibold text-white">Watson AI Assistant</h1>
               <p className="text-sm text-gray-500">
                 {isConnected ? (
                   <span className="flex items-center">
-                    <span className="h-2 w-2 bg-green-400 rounded-full mr-2"></span>
+                    <span className="h-2 w-2 bg-cv-matrix-green rounded-full mr-2 animate-pulse"></span>
                     Connected
                   </span>
                 ) : (
                   <span className="flex items-center">
-                    <span className="h-2 w-2 bg-red-400 rounded-full mr-2"></span>
+                    <span className="h-2 w-2 bg-cv-orange-500 rounded-full mr-2 animate-pulse"></span>
                     Connecting...
                   </span>
                 )}
@@ -250,14 +252,24 @@ export function ChatPage() {
             </div>
           </div>
           
-          <div className="text-sm text-gray-500">
-            Infrastructure Management Assistant
+          <div className="flex items-center space-x-4">
+            <div className="text-sm text-cv-dark-300">
+              Infrastructure Management Assistant
+            </div>
+            <Link
+              to="/dashboard"
+              className="flex items-center space-x-2 px-3 py-2 text-sm text-cv-dark-200 hover:text-cv-orange-400 hover:bg-cv-dark-700 rounded-lg transition-colors duration-200"
+              title="Go to Settings"
+            >
+              <CogIcon className="h-4 w-4" />
+              <span>Settings</span>
+            </Link>
           </div>
         </div>
       </header>
 
       {/* Messages */}
-      <div className="flex-1 overflow-y-auto px-6 py-4">
+      <div className="flex-1 overflow-y-auto px-6 py-4 bg-cv-dark-900">
         <div className="max-w-4xl mx-auto space-y-6">
           {messages.map((message) => (
             <div
@@ -267,10 +279,10 @@ export function ChatPage() {
               <div
                 className={`max-w-2xl px-4 py-3 rounded-lg ${
                   message.type === 'user'
-                    ? 'bg-primary-600 text-white'
+                    ? 'bg-cv-orange-600 text-white cv-orange-glow'
                     : message.type === 'system'
-                    ? 'bg-blue-50 border border-blue-200 text-blue-900'
-                    : 'bg-white border border-gray-200 text-gray-900 shadow-sm'
+                    ? 'bg-cv-dark-700 border border-cv-orange-500/30 text-cv-matrix-green'
+                    : 'bg-cv-dark-800 border border-cv-dark-600 text-cv-dark-100 shadow-lg'
                 }`}
               >
                 <div className="whitespace-pre-wrap">{message.content}</div>
@@ -287,14 +299,14 @@ export function ChatPage() {
           
           {isTyping.is_typing && (
             <div className="flex justify-start">
-              <div className="bg-white border border-gray-200 text-gray-900 shadow-sm max-w-2xl px-4 py-3 rounded-lg">
+              <div className="bg-cv-dark-800 border border-cv-dark-600 text-cv-dark-100 shadow-lg max-w-2xl px-4 py-3 rounded-lg">
                 <div className="flex items-center space-x-2">
                   <div className="flex space-x-1">
-                    <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce"></div>
-                    <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '0.1s' }}></div>
-                    <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '0.2s' }}></div>
+                    <div className="w-2 h-2 bg-cv-orange-500 rounded-full animate-bounce"></div>
+                    <div className="w-2 h-2 bg-cv-orange-500 rounded-full animate-bounce" style={{ animationDelay: '0.1s' }}></div>
+                    <div className="w-2 h-2 bg-cv-orange-500 rounded-full animate-bounce" style={{ animationDelay: '0.2s' }}></div>
                   </div>
-                  <span className="text-sm text-gray-500">
+                  <span className="text-sm text-cv-dark-300">
                     {isTyping.agent || 'Watson'} is thinking...
                   </span>
                 </div>
@@ -307,7 +319,7 @@ export function ChatPage() {
       </div>
 
       {/* Input */}
-      <div className="bg-white border-t border-gray-200 px-6 py-4">
+      <div className="bg-cv-dark-800 border-t border-cv-dark-600 px-6 py-4">
         <div className="max-w-4xl mx-auto">
           <div className="flex space-x-4">
             <input
@@ -317,20 +329,20 @@ export function ChatPage() {
               onChange={(e) => setInputMessage(e.target.value)}
               onKeyPress={handleKeyPress}
               placeholder="Ask Watson to deploy, scale, monitor, or manage your infrastructure..."
-              className="flex-1 px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
+              className="flex-1 px-4 py-3 bg-cv-dark-700 text-white border border-cv-dark-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-cv-orange-500 focus:border-cv-orange-500 placeholder-cv-dark-300"
               disabled={!isConnected}
             />
             <button
               onClick={sendMessage}
               disabled={!inputMessage.trim() || !isConnected}
-              className="px-6 py-3 bg-primary-600 text-white rounded-lg hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-primary-500 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+              className="px-6 py-3 bg-cv-orange-600 text-white rounded-lg hover:bg-cv-orange-700 focus:outline-none focus:ring-2 focus:ring-cv-orange-500 disabled:opacity-50 disabled:cursor-not-allowed transition-colors cv-button"
             >
               Send
             </button>
           </div>
           
           {!isConnected && (
-            <div className="mt-2 text-sm text-red-600">
+            <div className="mt-2 text-sm text-cv-orange-400">
               Connecting to Watson service... Please wait.
             </div>
           )}

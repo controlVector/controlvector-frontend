@@ -54,7 +54,7 @@ export function LoginPage() {
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
         {/* Email */}
         <div>
-          <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-2">
+          <label htmlFor="email" className="block text-sm font-medium text-cv-orange-400 mb-2">
             Email address
           </label>
           <input
@@ -64,15 +64,15 @@ export function LoginPage() {
             {...register('email')}
             className={`
               appearance-none relative block w-full px-3 py-3 border rounded-lg
-              placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-2 focus:ring-offset-2
-              focus:ring-primary-500 focus:border-primary-500 focus:z-10 sm:text-sm
-              transition-colors duration-200
+              bg-cv-dark-800 text-white placeholder-cv-dark-300 focus:outline-none focus:ring-2 focus:ring-offset-2
+              focus:ring-cv-orange-500 focus:border-cv-orange-500 focus:z-10 sm:text-sm
+              transition-colors duration-200 focus:bg-cv-dark-700
               ${errors.email 
-                ? 'border-red-300 focus:ring-red-500 focus:border-red-500' 
-                : 'border-gray-300'
+                ? 'border-red-400 focus:ring-red-500 focus:border-red-500' 
+                : 'border-cv-dark-600'
               }
             `}
-            placeholder="you@company.com"
+            placeholder="you@controlvector.dev"
           />
           {errors.email && (
             <motion.p
@@ -87,7 +87,7 @@ export function LoginPage() {
 
         {/* Password */}
         <div>
-          <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-2">
+          <label htmlFor="password" className="block text-sm font-medium text-cv-orange-400 mb-2">
             Password
           </label>
           <div className="relative">
@@ -98,12 +98,12 @@ export function LoginPage() {
               {...register('password')}
               className={`
                 appearance-none relative block w-full px-3 py-3 pr-10 border rounded-lg
-                placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-2 focus:ring-offset-2
-                focus:ring-primary-500 focus:border-primary-500 focus:z-10 sm:text-sm
-                transition-colors duration-200
+                bg-cv-dark-800 text-white placeholder-cv-dark-300 focus:outline-none focus:ring-2 focus:ring-offset-2
+                focus:ring-cv-orange-500 focus:border-cv-orange-500 focus:z-10 sm:text-sm
+                transition-colors duration-200 focus:bg-cv-dark-700
                 ${errors.password 
-                  ? 'border-red-300 focus:ring-red-500 focus:border-red-500' 
-                  : 'border-gray-300'
+                  ? 'border-red-400 focus:ring-red-500 focus:border-red-500' 
+                  : 'border-cv-dark-600'
                 }
               `}
               placeholder="Enter your password"
@@ -114,9 +114,9 @@ export function LoginPage() {
               className="absolute inset-y-0 right-0 pr-3 flex items-center"
             >
               {showPassword ? (
-                <EyeSlashIcon className="h-5 w-5 text-gray-400 hover:text-gray-600" />
+                <EyeSlashIcon className="h-5 w-5 text-cv-dark-300 hover:text-cv-orange-400" />
               ) : (
-                <EyeIcon className="h-5 w-5 text-gray-400 hover:text-gray-600" />
+                <EyeIcon className="h-5 w-5 text-cv-dark-300 hover:text-cv-orange-400" />
               )}
             </button>
           </div>
@@ -138,16 +138,16 @@ export function LoginPage() {
               id="remember-me"
               name="remember-me"
               type="checkbox"
-              className="h-4 w-4 text-primary-600 focus:ring-primary-500 border-gray-300 rounded"
+              className="h-4 w-4 text-cv-orange-500 focus:ring-cv-orange-500 border-cv-dark-600 rounded bg-cv-dark-800"
             />
-            <label htmlFor="remember-me" className="ml-2 block text-sm text-gray-700">
+            <label htmlFor="remember-me" className="ml-2 block text-sm text-cv-dark-100">
               Remember me
             </label>
           </div>
 
           <Link
             to="/auth/forgot-password"
-            className="text-sm text-primary-600 hover:text-primary-500 font-medium transition-colors duration-200"
+            className="text-sm text-cv-orange-400 hover:text-cv-orange-300 font-medium transition-colors duration-200"
           >
             Forgot password?
           </Link>
@@ -173,10 +173,10 @@ export function LoginPage() {
           className={`
             group relative w-full flex justify-center py-3 px-4 border border-transparent
             text-sm font-medium rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-offset-2
-            focus:ring-primary-500 transition-all duration-200
+            focus:ring-cv-orange-500 transition-all duration-200 cv-button
             ${isLoading 
-              ? 'bg-primary-400 cursor-not-allowed' 
-              : 'bg-primary-600 hover:bg-primary-700 shadow-md hover:shadow-lg'
+              ? 'bg-cv-orange-400 cursor-not-allowed opacity-50' 
+              : 'bg-gradient-to-r from-cv-orange-600 to-cv-orange-500 hover:from-cv-orange-700 hover:to-cv-orange-600 shadow-md hover:shadow-xl'
             }
           `}
         >
@@ -198,10 +198,10 @@ export function LoginPage() {
       <div className="mt-6">
         <div className="relative">
           <div className="absolute inset-0 flex items-center">
-            <div className="w-full border-t border-gray-300" />
+            <div className="w-full border-t border-cv-dark-600" />
           </div>
           <div className="relative flex justify-center text-sm">
-            <span className="px-2 bg-white text-gray-500">Or continue with</span>
+            <span className="px-2 bg-cv-dark-900 text-cv-dark-300">Or continue with</span>
           </div>
         </div>
       </div>
@@ -213,11 +213,11 @@ export function LoginPage() {
 
       {/* Sign up link */}
       <div className="mt-6 text-center">
-        <p className="text-sm text-gray-600">
+        <p className="text-sm text-cv-dark-200">
           Don't have an account?{' '}
           <Link
             to="/auth/signup"
-            className="font-medium text-primary-600 hover:text-primary-500 transition-colors duration-200"
+            className="font-medium text-cv-orange-400 hover:text-cv-orange-300 transition-colors duration-200"
           >
             Sign up for free
           </Link>
