@@ -155,7 +155,7 @@ export function DashboardPage() {
                 <p className="text-lg text-gray-600 mb-6">
                   {isOnboardingComplete 
                     ? 'Your ControlVector is configured and ready for AI-driven infrastructure management!' 
-                    : 'Authentication successful! Complete setup to start managing your infrastructure with Watson.'}
+                    : 'Authentication successful! Complete setup to start managing your infrastructure with Victor AI.'}
                 </p>
                 
                 {/* Credential Loss Warning */}
@@ -247,7 +247,7 @@ export function DashboardPage() {
                     </div>
                     <div className="flex items-center">
                       <div className="h-2 w-2 bg-green-500 rounded-full mr-3"></div>
-                      <span className="text-sm text-gray-700">Watson AI (Port 3004)</span>
+                      <span className="text-sm text-gray-700">Victor AI (Port 3004)</span>
                     </div>
                     <div className="flex items-center">
                       <div className="h-2 w-2 bg-green-500 rounded-full mr-3"></div>
@@ -268,7 +268,7 @@ export function DashboardPage() {
                         to="/chat"
                         className="flex-1 inline-flex justify-center items-center px-6 py-4 border border-transparent text-lg font-medium rounded-md text-white bg-gradient-to-r from-primary-600 to-primary-700 hover:from-primary-700 hover:to-primary-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500 transition-all duration-200 shadow-lg"
                       >
-                        🚀 Start Chatting with Watson
+                        🚀 Start Chatting with Victor
                       </Link>
                       <Link
                         to="/onboarding"
@@ -286,7 +286,7 @@ export function DashboardPage() {
                         🚀 Complete Setup
                       </Link>
                       <div className="flex-1 inline-flex justify-center items-center px-6 py-3 border border-gray-300 text-base font-medium rounded-md text-gray-400 bg-gray-100 cursor-not-allowed">
-                        💬 Chat with Watson (Complete setup first)
+                        💬 Chat with Victor (Complete setup first)
                       </div>
                     </>
                   )}

@@ -434,7 +434,7 @@ export function LLMProviderForm({ onComplete, onSkip }: LLMProviderFormProps) {
   return (
     <div className="space-y-6">
       <p className="text-gray-600 mb-6">
-        Choose your AI assistant provider. Watson will use this to understand and execute 
+        Choose your AI assistant provider. Victor will use this to understand and execute 
         your infrastructure requests through natural language.
       </p>
 

@@ -34,14 +34,14 @@ This is the React frontend for the ControlVector platform, built with TypeScript
 - **Credential Validation**: Dashboard automatically detects when stored credentials are missing
 - **Development Mode Warning**: Clear alerts when credentials are lost due to in-memory database restarts
 
-### Watson Chat Integration ✅
-- **Real-time Chat**: WebSocket connection to Watson AI service (port 3004)
+### Victor AI Chat Integration ✅
+- **Real-time Chat**: WebSocket connection to Victor AI service (watson port 3004)
 - **Conversation Management**: Create, manage, and persist chat conversations
 - **Intent Recognition**: Display AI-detected user intents with confidence scores
 - **Typing Indicators**: Real-time typing and processing status
 - **Professional Chat UI**: Modern chat interface with timestamps and message history
 - **JWT Authentication**: Secure user/workspace-based conversation creation
-- **Real Infrastructure Data**: Watson displays actual DigitalOcean costs ($47.86/month) from live API
+- **Real Infrastructure Data**: Victor displays actual DigitalOcean costs ($47.86/month) from live API
 - **Auto-reconnection**: WebSocket automatically reconnects after service restarts
 
 ### ControlVector Brand Integration ✅
@@ -102,7 +102,7 @@ frontend/
 ### Backend Services Integration
 - ✅ **Auth Service**: Complete integration with JWT authentication (port 3002)
 - ✅ **Context Manager**: Full integration for credential management (port 3005)
-- ✅ **Watson Service**: Full chat integration with WebSocket communication (port 3004)
+- ✅ **Victor AI Service**: Full chat integration with WebSocket communication (watson port 3004)
 - ✅ **Service Discovery**: All services auto-discovered and connected
 - ⏳ **Atlas Service**: Ready for infrastructure management UI (port 3003)
 
@@ -152,10 +152,10 @@ VITE_API_BASE_URL=http://localhost:3002
 ## Next Steps
 
 ### ✅ COMPLETED CORE FEATURES
-- **Watson-Atlas Integration**: MCP tool integration working perfectly with live DigitalOcean data
-- **Real Infrastructure Queries**: Watson successfully calls `atlas_get_infrastructure_overview` 
+- **Victor-Atlas Integration**: MCP tool integration working perfectly with live DigitalOcean data
+- **Real Infrastructure Queries**: Victor successfully calls `atlas_get_infrastructure_overview` 
 - **Live Cost Data**: System shows actual monthly costs ($47.86) from real infrastructure
-- **AI Response Integration**: Watson connected to user's LLM providers (Anthropic working) ✅
+- **AI Response Integration**: Victor connected to user's LLM providers (Anthropic working) ✅
 - **ControlVector Styling**: Authentic branding with matrix rain effects and dark theme ✅
 
 ### 🎯 HIGH PRIORITY USER EXPERIENCE ENHANCEMENTS
@@ -212,7 +212,7 @@ Based on current system capabilities and user value:
 
 **PRIORITY 1: Dashboard Infrastructure Summary** (High Impact, Medium Effort)
 - Add infrastructure overview widgets to dashboard
-- Display real-time cost data from Watson-Atlas integration
+- Display real-time cost data from Victor-Atlas integration
 - Create visual service health indicators
 - Implement quick action buttons for common tasks
 
@@ -259,7 +259,7 @@ Based on current system capabilities and user value:
 2. **Dashboard** → Dark-themed status interface with orange accents and settings access
 3. **Onboarding** → ControlVector-styled multi-step provider setup with dark theme
 4. **Context Storage** → Secure credential storage with brand-consistent UI feedback
-5. **Watson Chat** → Dark chat interface with matrix rain, orange user messages, and settings nav
+5. **Victor AI Chat** → Dark chat interface with matrix rain, orange user messages, and settings nav
 6. **Ready State** → Fully operational ControlVector-branded infrastructure management platform
 
 ## Repository Architecture Integration
@@ -270,4 +270,4 @@ This frontend integrates with the ControlVector microservices architecture:
 - **core-services/watson**: AI orchestration and conversation management
 - **core-services/atlas**: Infrastructure resource management
 
-The frontend serves as the primary user interface for the entire ControlVector ecosystem, featuring authentic ControlVector branding with matrix-style effects, dark themes, and orange accents. It provides secure credential onboarding and prepares users for AI-driven infrastructure management through Watson, all while maintaining the distinctive ControlVector aesthetic throughout the user experience.
+The frontend serves as the primary user interface for the entire ControlVector ecosystem, featuring authentic ControlVector branding with matrix-style effects, dark themes, and orange accents. It provides secure credential onboarding and prepares users for AI-driven infrastructure management through Victor AI, all while maintaining the distinctive ControlVector aesthetic throughout the user experience.

@@ -23,7 +23,7 @@ export function ChatPage() {
     {
       id: '1',
       type: 'system',
-      content: 'Welcome to ControlVector! I\'m Watson, your AI infrastructure assistant. I can help you deploy applications, manage cloud resources, monitor systems, and much more. What would you like to do today?',
+      content: 'Welcome to ControlVector! I\'m Victor, your AI infrastructure assistant. I can help you deploy applications, manage cloud resources, monitor systems, and much more. What would you like to do today?',
       timestamp: new Date()
     }
   ])
@@ -95,7 +95,7 @@ export function ChatPage() {
       
       ws.onopen = () => {
         setIsConnected(true)
-        console.log('Connected to Watson service')
+        console.log('Connected to Victor AI service')
       }
       
       ws.onmessage = (event) => {
@@ -134,12 +134,12 @@ export function ChatPage() {
       
       ws.onclose = () => {
         setIsConnected(false)
-        console.log('Disconnected from Watson service - attempting to reconnect in 3 seconds...')
+        console.log('Disconnected from Victor AI service - attempting to reconnect in 3 seconds...')
         
         // Auto-reconnect after 3 seconds
         setTimeout(() => {
           if (!wsRef.current || wsRef.current.readyState === WebSocket.CLOSED) {
-            console.log('Attempting to reconnect to Watson service')
+            console.log('Attempting to reconnect to Victor AI service')
             initializeWebSocket()
           }
         }, 3000)
@@ -182,7 +182,7 @@ export function ChatPage() {
     }))
     
     setInputMessage('')
-    setIsTyping({ is_typing: true, agent: 'Watson' })
+    setIsTyping({ is_typing: true, agent: 'Victor' })
   }
 
   const handleKeyPress = (e: React.KeyboardEvent) => {
@@ -232,10 +232,10 @@ export function ChatPage() {
         <div className="flex items-center justify-between">
           <div className="flex items-center space-x-3">
             <div className="h-8 w-8 bg-gradient-to-r from-cv-orange-600 to-cv-orange-500 rounded-lg flex items-center justify-center cv-orange-glow">
-              <span className="text-white font-bold text-sm">W</span>
+              <span className="text-white font-bold text-sm">V</span>
             </div>
             <div>
-              <h1 className="text-lg font-semibold text-white">Watson AI Assistant</h1>
+              <h1 className="text-lg font-semibold text-white">Victor AI Assistant</h1>
               <p className="text-sm text-gray-500">
                 {isConnected ? (
                   <span className="flex items-center">
@@ -307,7 +307,7 @@ export function ChatPage() {
                     <div className="w-2 h-2 bg-cv-orange-500 rounded-full animate-bounce" style={{ animationDelay: '0.2s' }}></div>
                   </div>
                   <span className="text-sm text-cv-dark-300">
-                    {isTyping.agent || 'Watson'} is thinking...
+                    {isTyping.agent || 'Victor'} is thinking...
                   </span>
                 </div>
               </div>
@@ -328,7 +328,7 @@ export function ChatPage() {
               value={inputMessage}
               onChange={(e) => setInputMessage(e.target.value)}
               onKeyPress={handleKeyPress}
-              placeholder="Ask Watson to deploy, scale, monitor, or manage your infrastructure..."
+              placeholder="Ask Victor to deploy, scale, monitor, or manage your infrastructure..."
               className="flex-1 px-4 py-3 bg-cv-dark-700 text-white border border-cv-dark-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-cv-orange-500 focus:border-cv-orange-500 placeholder-cv-dark-300"
               disabled={!isConnected}
             />
@@ -343,7 +343,7 @@ export function ChatPage() {
           
           {!isConnected && (
             <div className="mt-2 text-sm text-cv-orange-400">
-              Connecting to Watson service... Please wait.
+              Connecting to Victor AI service... Please wait.
             </div>
           )}
         </div>
