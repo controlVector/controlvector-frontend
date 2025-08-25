@@ -269,7 +269,7 @@ export function DashboardPage() {
                     <>
                       <Link
                         to="/chat"
-                        className="flex-1 inline-flex justify-center items-center px-6 py-4 border border-transparent text-lg font-medium rounded-md text-white bg-gradient-to-r from-cv-orange-600 to-cv-orange-500 hover:from-cv-orange-700 hover:to-cv-orange-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-cv-orange-500 transition-all duration-200 shadow-lg cv-orange-glow"
+                        className="flex-1 inline-flex justify-center items-center px-6 py-4 border border-transparent text-lg font-medium rounded-md bg-gradient-to-r from-cv-orange-600 to-cv-orange-500 hover:from-cv-orange-700 hover:to-cv-orange-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-cv-orange-500 transition-all duration-200 shadow-lg cv-white-glow"
                       >
                         🚀 Start Chatting with Victor
                       </Link>
