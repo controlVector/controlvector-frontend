@@ -31,6 +31,22 @@ export function ChatPage() {
   const [isConnected, setIsConnected] = useState(false)
   const [isTyping, setIsTyping] = useState<TypingIndicator>({ is_typing: false })
   const [conversationId, setConversationId] = useState<string | null>(null)
+  const [currentThinkingMessage, setCurrentThinkingMessage] = useState(0)
+  
+  const thinkingMessages = [
+    'Analyzing your infrastructure needs...',
+    'Consulting with Atlas for deployment options...',
+    'Optimizing cost and performance...',
+    'Checking cloud provider availability...',
+    'Reviewing security configurations...',
+    'Calculating resource requirements...',
+    'Coordinating with microservices...',
+    'Planning deployment strategy...',
+    'Accessing real-time infrastructure data...',
+    'Running cost optimization algorithms...',
+    'Synchronizing with Context Manager...',
+    'Preparing deployment recommendations...'
+  ]
   
   const messagesEndRef = useRef<HTMLDivElement>(null)
   const wsRef = useRef<WebSocket | null>(null)
@@ -52,6 +68,21 @@ export function ChatPage() {
       }
     }
   }, [])
+
+  // Cycle through thinking messages when typing
+  useEffect(() => {
+    let interval: NodeJS.Timeout
+    if (isTyping.is_typing) {
+      interval = setInterval(() => {
+        setCurrentThinkingMessage(prev => (prev + 1) % thinkingMessages.length)
+      }, 2000) // Change message every 2 seconds
+    }
+    return () => {
+      if (interval) {
+        clearInterval(interval)
+      }
+    }
+  }, [isTyping.is_typing, thinkingMessages.length])
 
   const initializeWebSocket = async () => {
     try {
@@ -173,7 +204,7 @@ export function ChatPage() {
 
     setMessages(prev => [...prev, userMessage])
     
-    // Send to Watson via WebSocket
+    // Send to Victor via WebSocket
     wsRef.current.send(JSON.stringify({
       type: 'user_message',
       content: inputMessage.trim(),
@@ -279,7 +310,7 @@ export function ChatPage() {
               <div
                 className={`max-w-2xl px-4 py-3 rounded-lg ${
                   message.type === 'user'
-                    ? 'bg-cv-orange-600 text-white cv-orange-glow'
+                    ? 'bg-cv-orange-600 text-white border border-cv-orange-400'
                     : message.type === 'system'
                     ? 'bg-cv-dark-700 border border-cv-orange-500/30 text-cv-matrix-green'
                     : 'bg-cv-dark-800 border border-cv-dark-600 text-cv-dark-100 shadow-lg'
@@ -287,7 +318,11 @@ export function ChatPage() {
               >
                 <div className="whitespace-pre-wrap">{message.content}</div>
                 <div className="flex items-center justify-between mt-2">
-                  <span className="text-xs opacity-70">
+                  <span className={`text-xs ${
+                    message.type === 'user' 
+                      ? 'text-white opacity-90' 
+                      : 'text-cv-dark-400 opacity-90'
+                  }`}>
                     {formatTimestamp(message.timestamp)}
                     {message.agent && ` • ${message.agent}`}
                   </span>
@@ -307,7 +342,7 @@ export function ChatPage() {
                     <div className="w-2 h-2 bg-cv-orange-500 rounded-full animate-bounce" style={{ animationDelay: '0.2s' }}></div>
                   </div>
                   <span className="text-sm text-cv-dark-300">
-                    {isTyping.agent || 'Victor'} is thinking...
+                    Victor: {thinkingMessages[currentThinkingMessage]}
                   </span>
                 </div>
               </div>

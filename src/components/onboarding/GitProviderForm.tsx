@@ -258,7 +258,7 @@ export function GitProviderForm({ onComplete, onSkip }: GitProviderFormProps) {
           ))}
 
           {selectedProvider.id === 'ssh_key' && (
-            <div className="bg-cv-dark-800 border border-cv-orange-500/30 rounded-md p-3"
+            <div className="bg-cv-dark-800 border border-cv-orange-500/30 rounded-md p-3">
               <div className="flex">
                 <div className="flex-shrink-0">
                   <svg className="h-5 w-5 text-cv-orange-400" fill="currentColor" viewBox="0 0 20 20">
