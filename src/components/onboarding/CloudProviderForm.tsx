@@ -306,7 +306,7 @@ export function CloudProviderForm({ onComplete, onSkip }: CloudProviderFormProps
             <button
               type="submit"
               disabled={isLoading}
-              className="flex-1 px-4 py-2 text-sm font-medium text-white bg-cv-orange-500 cv-orange-glow border border-transparent rounded-md hover:bg-cv-orange-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-cv-orange-500 disabled:opacity-50"
+              className="flex-1 px-4 py-2 text-sm font-medium cv-white-glow bg-cv-orange-500 border border-transparent rounded-md hover:bg-cv-orange-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-cv-orange-500 disabled:opacity-50"
             >
               {isLoading ? 'Storing...' : 'Save & Continue'}
             </button>

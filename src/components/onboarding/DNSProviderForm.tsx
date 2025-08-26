@@ -26,13 +26,20 @@ const DNS_PROVIDERS: DNSProvider[] = [
     id: 'cloudflare',
     name: 'Cloudflare',
     logo: '☁️',
-    description: 'Global DNS and CDN service',
+    description: 'Global DNS and CDN service (requires Account API token)',
     fields: [
       {
+        name: 'account_id',
+        label: 'Account ID',
+        type: 'text',
+        placeholder: 'Your Cloudflare Account ID (32-character hex)',
+        required: true
+      },
+      {
         name: 'api_token',
-        label: 'API Token',
+        label: 'Account API Token',
         type: 'password',
-        placeholder: 'Enter your Cloudflare API Token',
+        placeholder: 'Enter your Cloudflare Account API Token',
         required: true
       },
       {
@@ -95,6 +102,8 @@ export function DNSProviderForm({ onComplete, onSkip }: DNSProviderFormProps) {
   const [formData, setFormData] = useState<Record<string, string>>({})
   const [isLoading, setIsLoading] = useState(false)
   const [showForm, setShowForm] = useState(false)
+  const [curlCommand, setCurlCommand] = useState('')
+  const [showCurlInput, setShowCurlInput] = useState(false)
 
   const handleProviderSelect = (provider: DNSProvider) => {
     setSelectedProvider(provider)
@@ -104,6 +113,30 @@ export function DNSProviderForm({ onComplete, onSkip }: DNSProviderFormProps) {
 
   const handleInputChange = (name: string, value: string) => {
     setFormData(prev => ({ ...prev, [name]: value }))
+  }
+
+  const parseCurlCommand = (curl: string) => {
+    try {
+      // Extract account ID from URL pattern: /accounts/{account_id}/
+      const accountIdMatch = curl.match(/\/accounts\/([a-f0-9]{32})\//i)
+      // Extract Bearer token
+      const tokenMatch = curl.match(/Bearer\s+([A-Za-z0-9_-]+)/i)
+      
+      if (accountIdMatch && tokenMatch) {
+        setFormData(prev => ({
+          ...prev,
+          account_id: accountIdMatch[1],
+          api_token: tokenMatch[1]
+        }))
+        toast.success('Account ID and API token extracted from curl command!')
+        setShowCurlInput(false)
+        setCurlCommand('')
+      } else {
+        toast.error('Could not extract Account ID and token from curl command. Please check the format.')
+      }
+    } catch (error) {
+      toast.error('Failed to parse curl command')
+    }
   }
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -125,6 +158,13 @@ export function DNSProviderForm({ onComplete, onSkip }: DNSProviderFormProps) {
 
       // Store credentials in Context Manager
       if (selectedProvider.id === 'cloudflare') {
+        await secretAPI.storeCredential({
+          key: 'cloudflare_account_id',
+          value: formData.account_id,
+          credential_type: 'api_key',
+          provider: 'cloudflare'
+        })
+
         await secretAPI.storeCredential({
           key: 'cloudflare_api_token',
           value: formData.api_token,
@@ -201,6 +241,78 @@ export function DNSProviderForm({ onComplete, onSkip }: DNSProviderFormProps) {
           </div>
         </div>
 
+        {/* Cloudflare-specific guidance */}
+        {selectedProvider.id === 'cloudflare' && (
+          <div className="bg-cv-dark-700 border border-cv-orange-500/20 rounded-lg p-4 mb-6">
+            <h5 className="text-sm font-semibold text-cv-orange-400 mb-2">📘 Cloudflare Account API Token Required</h5>
+            <p className="text-xs text-cv-dark-200 mb-3">
+              ControlVector requires Account API tokens, not standard API tokens. Account tokens have access to account-level operations.
+            </p>
+            
+            <div className="space-y-2 mb-3">
+              <p className="text-xs text-cv-dark-200">
+                <strong>1. Find Account ID:</strong> Dashboard → Right sidebar → Account ID (32-char hex)
+              </p>
+              <p className="text-xs text-cv-dark-200">
+                <strong>2. Create Account Token:</strong> <a 
+                  href="https://dash.cloudflare.com/profile/api-tokens" 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  className="text-cv-orange-400 hover:text-cv-orange-300 underline"
+                >
+                  Profile → API Tokens → Create Token
+                </a>
+              </p>
+              <p className="text-xs text-cv-dark-200">
+                <strong>3. Use Template:</strong> "Custom token" → Include <code className="bg-cv-dark-800 px-1 rounded text-cv-matrix-green">Account:Read</code> permission
+              </p>
+            </div>
+            
+            <div className="mt-3 pt-3 border-t border-cv-dark-600">
+              <button
+                type="button"
+                onClick={() => setShowCurlInput(!showCurlInput)}
+                className="text-xs text-cv-orange-400 hover:text-cv-orange-300 underline"
+              >
+                {showCurlInput ? 'Hide' : 'Show'} curl command parser
+              </button>
+              
+              {showCurlInput && (
+                <div className="mt-3 space-y-2">
+                  <label className="block text-xs font-medium text-cv-dark-200">
+                    Paste your working curl command:
+                  </label>
+                  <textarea
+                    value={curlCommand}
+                    onChange={(e) => setCurlCommand(e.target.value)}
+                    placeholder='curl "https://api.cloudflare.com/client/v4/accounts/YOUR_ACCOUNT_ID/tokens/verify" -H "Authorization: Bearer YOUR_TOKEN"'
+                    className="w-full px-2 py-1 bg-cv-dark-800 text-cv-matrix-green border border-cv-dark-600 rounded text-xs font-mono resize-none"
+                    rows={3}
+                  />
+                  <button
+                    type="button"
+                    onClick={() => parseCurlCommand(curlCommand)}
+                    className="px-3 py-1 text-xs bg-cv-orange-600 text-white rounded hover:bg-cv-orange-700 transition-colors"
+                  >
+                    Extract Account ID & Token
+                  </button>
+                </div>
+              )}
+            </div>
+            
+            <div className="mt-2">
+              <a 
+                href="https://developers.cloudflare.com/fundamentals/api/get-started/account-owned-tokens/" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="text-xs text-cv-orange-400 hover:text-cv-orange-300 underline inline-flex items-center gap-1"
+              >
+                📖 Official Documentation →
+              </a>
+            </div>
+          </div>
+        )}
+
         <form onSubmit={handleSubmit} className="space-y-4">
           {selectedProvider.fields.map((field) => (
             <div key={field.name}>
@@ -229,7 +341,7 @@ export function DNSProviderForm({ onComplete, onSkip }: DNSProviderFormProps) {
             <button
               type="submit"
               disabled={isLoading}
-              className="flex-1 px-4 py-2 text-sm font-medium text-white bg-cv-orange-600 border border-transparent rounded-md hover:bg-cv-orange-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-cv-orange-500 disabled:opacity-50 cv-orange-glow transition-colors"
+              className="flex-1 px-4 py-2 text-sm font-medium cv-white-glow bg-cv-orange-600 border border-transparent rounded-md hover:bg-cv-orange-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-cv-orange-500 disabled:opacity-50 transition-colors"
             >
               {isLoading ? 'Storing...' : 'Save & Continue'}
             </button>
