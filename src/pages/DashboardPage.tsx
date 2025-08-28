@@ -284,7 +284,7 @@ export function DashboardPage() {
                     <>
                       <Link
                         to="/onboarding"
-                        className="flex-1 inline-flex justify-center items-center px-6 py-3 border border-transparent text-base font-medium rounded-md text-white bg-cv-orange-600 hover:bg-cv-orange-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-cv-orange-500 transition-colors cv-orange-glow"
+                        className="flex-1 inline-flex justify-center items-center px-6 py-3 border border-transparent text-base font-medium rounded-md text-white bg-cv-orange-600 hover:bg-cv-orange-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-cv-orange-500 transition-colors cv-white-glow"
                       >
                         🚀 Complete Setup
                       </Link>
